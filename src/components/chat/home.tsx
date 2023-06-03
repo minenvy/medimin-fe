@@ -4,10 +4,10 @@ import {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import UserAvatar from '@/components/avatar'
 import useDebounce from '@/api/use-debounce'
-import {domain} from '@/constants/links'
 import {IUserInfo} from '@/App'
 import useUser from '@/api/use-user'
 import customFetch from '@/api/fetch'
+import {availableFriends} from './available-bot'
 
 interface IChatHome {
 	setPersonalChat: Function
@@ -25,34 +25,33 @@ function ChatHome(props: IChatHome) {
 	const messengers: Array<IUserInfo> = messenger ? foundMessengers : chattedWith
 
 	useEffect(() => {
-		customFetch('/user/get-by-name', {
-			name: messenger,
-		})
-			.then((res) => res.json())
-			.then((data) =>
-				setFoundMessengers(
-					data.filter((friend: any) => friend?.email !== user?.email)
-				)
+		;(async () => {
+			const res = (await customFetch('/user/get-by-name', {
+				name: messenger,
+			}).catch((err) => console.log(err))) as Response
+			const data = await res.json()
+			setFoundMessengers(
+				data.filter((friend: any) => friend?.email !== user?.email)
 			)
-			.catch((err) => console.log(err))
+		})()
 		// eslint-disable-next-line react-api/exhaustive-deps
 	}, [debouncedMessenger])
 
-	const chatWithPerson = (user: IUserInfo) => {
+	const chatWithBot = (chattingUser: IUserInfo) => {
+		setPersonalChat(chattingUser)
+	}
+	const chatWithPerson = async (chattingUser: IUserInfo) => {
 		setNotification((preState: Array<string>) =>
-			preState.filter((email) => email !== user.email)
+			preState.filter((email) => email !== chattingUser.email)
 		)
-		setPersonalChat(user)
+		setPersonalChat(chattingUser)
 
-		customFetch('/user/change-info', {
+		await customFetch('/user/change-info', {
 			token: localStorage.getItem('token'),
-			chattedPerson: user.email,
-		})
-			.then((res) => res.json())
-			.then(() => {
-				changeUserInfo()
-			})
-			.catch((err) => console.log(err))
+			chattedPerson: chattingUser.email,
+		}).catch((err) => console.log(err))
+
+		changeUserInfo()
 	}
 
 	return (
@@ -66,6 +65,21 @@ function ChatHome(props: IChatHome) {
 				value={messenger}
 				onChange={(e) => setMessenger(e.target.value)}
 			/>
+			{availableFriends.length > 0 &&
+				availableFriends.map((user) => {
+					const {username, image, email} = user
+
+					return (
+						<AvatarWrapper key={email} onClick={() => chatWithBot(user)}>
+							<UserAvatar
+								username={username}
+								image={image}
+								email={email}
+								canNavigate={false}
+							/>
+						</AvatarWrapper>
+					)
+				})}
 			{messengers.length > 0 &&
 				messengers.map((user) => {
 					const {username, image, email} = user

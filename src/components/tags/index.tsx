@@ -29,7 +29,7 @@ function Tags(props: ITags) {
 	)
 }
 const Wrapper = styled.div`
-	border-bottom: 1px solid rgba(230, 230, 230, 1);
+	border-bottom: 1px solid rgba(235, 235, 235, 1);
 	padding-bottom: 24px;
 	& .ant-space {
 		margin-top: 20px;

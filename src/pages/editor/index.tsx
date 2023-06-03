@@ -1,4 +1,4 @@
-import {Input, Button, Tag, Upload, message} from 'antd'
+import {Input, Button, Tag, Upload, message, Image} from 'antd'
 import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import styled from 'styled-components'
@@ -50,7 +50,7 @@ function Editor() {
 		await customFetch(`/article/${_id ? 'update' : 'add'}`, {
 			title,
 			description: body,
-			image: link,
+			image: fileList[0]?.preview,
 			tagList: tags,
 			token,
 			_id,
@@ -90,7 +90,6 @@ function Editor() {
 		file.preview = await getBase64(file.originFileObj as RcFile)
 
 		setFileList([file])
-		setLink(file.preview as string)
 	}
 
 	return (
@@ -115,19 +114,34 @@ function Editor() {
 					</Tag>
 				)
 			})}
+			{link && fileList.length === 0 && (
+				<div>
+					<p>Current Image:</p>
+					<Image
+						src={link}
+						preview={false}
+						alt="avatar"
+						width={'200px'}
+						height={'200px'}
+					/>
+				</div>
+			)}
 			<Upload
 				listType="picture"
 				maxCount={1}
 				beforeUpload={beforeUpload}
 				onChange={changeImage}
 				onRemove={() => {
-					setLink('')
 					setFileList([])
 				}}
 				fileList={fileList}
 				customRequest={() => {}}
 			>
-				{!link && <Button>Choose image</Button>}
+				{link ? (
+					<Button>Choose new image</Button>
+				) : (
+					<Button>Choose image</Button>
+				)}
 			</Upload>
 			<StyledButton type="primary" size="middle" onClick={handleSubmit}>
 				Publish Article
@@ -164,6 +178,7 @@ const Body = styled(Input.TextArea)`
 `
 const StyledButton = styled(Button)`
 	margin-top: 20px;
+	margin-bottom: 20px;
 	float: right;
 	height: 50px;
 	padding: 12px 24px;

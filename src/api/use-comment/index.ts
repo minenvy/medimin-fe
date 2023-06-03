@@ -24,7 +24,7 @@ export async function getComments(_id: string) {
 	try {
 		const res = await customFetch('/comment/get-by-id', {
 			_id,
-		})
+		}) as Response
 		const data = await res.json()
 		return data?.comments
 	} catch (err) {

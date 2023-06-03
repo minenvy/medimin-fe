@@ -29,7 +29,7 @@ export default function useArticle(_id?: string) {
 }
 export async function getArticle(_id: string) {
 	try {
-		const res = await customFetch('/article/get-by-id', { _id })
+		const res = await customFetch('/article/get-by-id', { _id }) as Response
 		const data = await res.json()
 		return data
 	} catch (err) {

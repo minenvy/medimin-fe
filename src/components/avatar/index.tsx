@@ -20,17 +20,22 @@ function UserAvatar(props: IAvatarProps) {
 	}
 
 	return (
-		<div onClick={toProfile} style={{zIndex: 100, cursor: 'pointer'}}>
+		<Wrapper onClick={toProfile}>
 			<StyledAvatar
 				shape="circle"
 				icon={<UserOutlined />}
 				src={image ? image : null}
 			/>
 			<UserName strong={bold}>{username}</UserName>
-		</div>
+		</Wrapper>
 	)
 }
 
+const Wrapper = styled.div`
+	min-width: 125px;
+	z-index: 100;
+	cursor: pointer;
+`
 const StyledAvatar = styled(Avatar)`
 	vertical-align: middle;
 	background-color: #1677ff;

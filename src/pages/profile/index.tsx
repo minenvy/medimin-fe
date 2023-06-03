@@ -15,7 +15,7 @@ function Profile() {
 	const [items, setItems] = useState(profileTags)
 	const [friend, setFriend] = useState<IUserInfo>()
 	const [selectedKey, setSelectedKey] = useState(
-		items[3]?.key || items.find((item) => !!item?.label)?.key
+		items.find((item) => !!item?.label)?.key
 	)
 	const {user, getUser, changeUserInfo} = useUser()
 	const articles = useArticles()
@@ -47,16 +47,7 @@ function Profile() {
 
 	return (
 		<>
-			<Banner
-				style={{
-					backgroundImage: `url(${
-						friend?.background ||
-						'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRisv-yQgXGrto6OxQxX62JyvyQGvRsQQ760g&usqp=CAU'
-					})`,
-					backgroundSize: 'cover',
-					backgroundRepeat: 'no-repeat',
-				}}
-			>
+			<Banner url={user?.background}>
 				<Wrapper>
 					<StyledAvatar
 						shape="circle"
@@ -92,10 +83,16 @@ function Profile() {
 	)
 }
 
-const Banner = styled.div`
-	background-color: #f3f3f3;
+const Banner = styled.div.attrs((props: {url: string}) => ({
+	url:
+		props.url ||
+		'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRisv-yQgXGrto6OxQxX62JyvyQGvRsQQ760g&usqp=CAU',
+}))`
+	min-height: 40vh;
+	background-image: url(${(props) => props.url});
 	background-repeat: no-repeat;
 	background-size: cover;
+	position: relative;
 `
 const Wrapper = styled.div`
 	max-width: 920px;
@@ -133,6 +130,8 @@ const StyledButton = styled(Button)`
 	background-color: transparent;
 	line-height: 20px;
 	align-self: flex-end;
+	position: absolute;
+	bottom: 20px;
 `
 const ArticleWrapper = styled.div`
 	padding: 0 20%;

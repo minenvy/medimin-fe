@@ -24,22 +24,23 @@ function Login() {
 	const handleChangePassword = (e: any) => {
 		setPassword(e.target.value)
 	}
-	const handleSubmit = () => {
-		customFetch(isInLogin ? '/auth/login' : '/auth/register', {
-			user: {
-				username,
-				email,
-				password,
-			},
-		})
-			.then((resp) => resp.json())
-			.then((res) => {
-				if (!res.token) return
-				localStorage.setItem('token', res.token)
-				navigate('/')
-				window.location.reload()
-			})
-			.catch((err) => console.log(err))
+	const handleSubmit = async () => {
+		const res = (await customFetch(
+			isInLogin ? '/auth/login' : '/auth/register',
+			{
+				user: {
+					username,
+					email,
+					password,
+				},
+			}
+		).catch((err) => console.log(err))) as Response
+
+		const data = await res.json()
+		if (!data?.token) return
+		localStorage.setItem('token', data?.token)
+		navigate('/')
+		window.location.reload()
 	}
 
 	return (

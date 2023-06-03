@@ -17,7 +17,7 @@ export default function useArticles() {
 
 export async function getArticles() {
 	try {
-		const res = await customFetch('/article/get')
+		const res = await customFetch('/article/get') as Response
 		const data = await res.json()
 		return data
 	} catch (err) {
@@ -30,7 +30,7 @@ export async function follow(followingEmail: string, followedEmail: string) {
 		const res = await customFetch('/user/follow', {
 			followingEmail,
 			followedEmail,
-		})
+		}) as Response
 		const data = await res.json()
 		return data?.message
 	} catch (err) {

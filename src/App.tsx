@@ -1,5 +1,5 @@
 import {Routes, Route} from 'react-router-dom'
-import Header from '@/components/header'
+import Header from '@/layouts/header'
 import Login from '@/pages/login'
 import Home from '@/pages/home'
 import Editor from '@/pages/editor'
@@ -27,7 +27,7 @@ function App() {
 				<Route path={'/register'} element={<Login />} />
 				<Route path={'/editor/:_id'} element={<Editor />} />
 				<Route path={'/editor'} element={<Editor />} />
-				<Route path={'/settings'} element={<Settings />} />
+				<Route path={'/setting'} element={<Settings />} />
 				<Route path={'/profile/:email'} element={<Profile />} />
 				<Route path={'/profile'} element={<Profile />} />
 				<Route path={'/article/:_id'} element={<Article />} />

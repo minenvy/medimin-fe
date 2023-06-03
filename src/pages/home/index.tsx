@@ -85,7 +85,7 @@ const Sider = styled.div`
 	position: sticky;
 	top: 0;
 	padding-left: clamp(24px, 24px + 100vw - 1080px, 40px);
-	border-left: solid 1px rgba(242, 242, 242, 1);
+	border-left: solid 1px rgba(235, 235, 235, 1);
 `
 
 export default Home

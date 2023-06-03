@@ -5,6 +5,8 @@ import ChatHome from './home'
 import PersonalChat from './personal'
 import socket from '@/socket'
 import styled from 'styled-components'
+import {availableFriends} from './available-bot'
+import ChatWithBot from './chat-with-bot'
 
 interface IPersonalChat {
 	username: string
@@ -23,6 +25,9 @@ function ChatButton() {
 	})
 	const [count, setCount] = useState(0)
 	const [notification, setNotification] = useState<Array<string>>([])
+	const isChattingWithBot =
+		availableFriends.find((friend) => friend.email === personalChat.email) ||
+		false
 
 	useEffect(() => {
 		socket.on('have notification', (data) => {
@@ -49,17 +54,18 @@ function ChatButton() {
 				icon={isChatting ? <CloseOutlined /> : <CommentOutlined />}
 				onClick={() => setIsChatting(!isChatting)}
 			/>
-			{isChatting ? (
-				!personalChat.email ? (
+			{isChatting &&
+				(!personalChat.email ? (
 					<ChatHome
 						setPersonalChat={setPersonalChat}
 						notification={notification}
 						setNotification={setNotification}
 					/>
+				) : isChattingWithBot ? (
+					<ChatWithBot {...personalChat} setPersonalChat={setPersonalChat} />
 				) : (
 					<PersonalChat {...personalChat} setPersonalChat={setPersonalChat} />
-				)
-			) : null}
+				))}
 		</>
 	)
 }

@@ -26,6 +26,7 @@ function Article() {
 	const inputRef = useRef<HTMLInputElement>(null)
 	const {comments, setComments} = useComment(_id)
 	const article = useArticle(_id)
+	const newCommentRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
 		setIsLiked(
@@ -35,6 +36,10 @@ function Article() {
 		)
 		// eslint-disable-next-line react-api/exhaustive-deps
 	}, [user?.username, article])
+
+	useEffect(() => {
+		newCommentRef.current?.scrollIntoView({block: 'end', inline: 'nearest'})
+	}, [comments.length])
 
 	const like = () => {
 		likeArticle(_id, user?.email || '')
@@ -141,9 +146,12 @@ function Article() {
 				<Button type="text" icon={<SendOutlined />} onClick={postNewComment} />
 			</MyComment>
 			{comments.map((comment, id) => {
+				const isNewComment = id === 0
+
 				return (
 					<Comment
 						key={id}
+						ref={isNewComment ? newCommentRef : null}
 						author={comment.author}
 						description={comment.description}
 					/>

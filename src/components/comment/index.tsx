@@ -2,21 +2,29 @@ import {UserOutlined} from '@ant-design/icons'
 import {Avatar, Typography} from 'antd'
 import styled from 'styled-components'
 import {IUserInfo} from '@/App'
+import {useNavigate} from 'react-router-dom'
+import React from 'react'
 
 interface ICommentProps {
 	author: IUserInfo
 	description: string
 }
 
-function Comment(props: ICommentProps) {
+const Comment = React.forwardRef((props: ICommentProps, ref: any) => {
 	const {author, description} = props
+	const navigate = useNavigate()
+
+	const redirectToProfile = () => {
+		navigate(`/profile/${author.email}`)
+	}
 
 	return (
-		<Wrapper>
+		<Wrapper ref={ref}>
 			<StyledAvatar
 				shape="circle"
 				icon={<UserOutlined />}
 				src={author?.image}
+				onClick={redirectToProfile}
 			/>
 			<CommentLine>
 				<TitleComment>
@@ -26,7 +34,7 @@ function Comment(props: ICommentProps) {
 			</CommentLine>
 		</Wrapper>
 	)
-}
+})
 
 const Wrapper = styled.div`
 	display: flex;
@@ -37,6 +45,9 @@ const StyledAvatar = styled(Avatar)`
 	background-color: #1677ff;
 	min-width: 32px;
 	margin-right: 8px;
+	&:hover {
+		cursor: pointer;
+	}
 `
 const CommentLine = styled.div`
 	display: flex;
@@ -51,9 +62,6 @@ const TitleComment = styled.div`
 	justify-content: space-between;
 	& span {
 		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-		&:hover {
-			cursor: pointer;
-		}
 	}
 `
 const Description = styled(Typography.Text)`

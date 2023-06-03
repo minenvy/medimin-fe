@@ -41,7 +41,13 @@ function Article(props: IArticle) {
 						</Tags>
 					</StyledDiv>
 				</About>
-				<Image width={120} height={120} src={image} alt="imgage" />
+				<Image
+					width={120}
+					height={120}
+					src={image}
+					alt="imgage"
+					preview={false}
+				/>
 			</Wrapper>
 			<Divider />
 		</>
@@ -55,9 +61,13 @@ const StyledDiv = styled.div`
 	justify-content: space-between;
 `
 const Wrapper = styled(StyledDiv)`
-	padding-top: 24px;
+	padding: 12px;
 	margin-bottom: 32px;
 	cursor: pointer;
+	&:hover {
+		border-radius: 8px;
+		background-color: #f6f6f6;
+	}
 `
 const About = styled.div`
 	flex: 1;

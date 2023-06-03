@@ -20,7 +20,7 @@ export default function useUser() {
 			const res = await customFetch('/user/get', {
 				token,
 				authorEmail: email,
-			})
+			}) as Response
 			const data = await res.json()
 			return data
 		} catch (err) {
